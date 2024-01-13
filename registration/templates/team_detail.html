@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>{{ team.name }} - Team Detail</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .total-score {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        .full-width-table {
+            margin-left: 10px;
+            margin-right: 10px;
+            width: calc(100% - 20px);
+        }
+        .table td, .table th {
+            padding: 5px;
+        }
+        .action-icons {
+            display: flex;
+            justify-content: space-around;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-3">
+        <div class="header-container">
+            <h1>{{ team.name }}</h1>
+            <h1 class="total-score">Team Score: {{ total_score }}</h1>
+            <!-- Delete Team Button -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteConfirmModal">
+                Delete Team
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped full-width-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>University</th>
+                            <th>LeetCode Score</th>
+                            <th>Codeforces Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in team.members.all %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.university_college_school }}</td>
+                            <td>{{ student.leetcode_solved_problems_count }}</td>
+                            <td>{{ student.codeforces_solved_problems_count }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6">No members in this team.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{% url 'team_list' %}" class="btn btn-primary">Back to Team List</a>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmModalLabel">Confirm Delete</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this team?
+                    </div>
+                    <div class="modal-footer">
+                        <form action="{% url 'delete_team' team.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <input type="submit" class="btn btn-danger" value="Delete Team">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- jQuery (ensure this is before Bootstrap's JS) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap Bundle JS (includes Popper.js) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

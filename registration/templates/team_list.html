@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Team List</title>
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .register-button {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .table td, .table th {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-3">
+        <div class="header-container">
+            <h1>Team List</h1>
+            <a href="{% url 'register_team' %}" class="btn btn-primary register-button">Register Team</a>
+        </div>
+        <form method="get" action="" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search by name">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Team Name</th>
+                    <th>Total Problems Solved</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in teams %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>
+                        <a href="{% url 'team_detail' team.id %}" class="link-black" target="_blank" style="color: black;">{{ team.name }}</a>
+                    </td>
+                    <td>{{ team.total_problems_solved }}</td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No teams found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap Bundle JS (includes jQuery and Popper) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

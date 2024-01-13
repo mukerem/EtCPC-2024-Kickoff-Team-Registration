@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Student List</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .register-button {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        .wide-column {
+            width: 30%;
+        }
+        .small-column {
+            width: 10%;
+        }
+        .small-small-column {
+            width: 5%;
+        }
+        .full-width-table {
+            margin-left: 10px;
+            margin-right: 10px;
+            width: calc(100% - 20px);
+        }
+        .table td, .table th {
+            padding: 5px;
+        }
+        .action-icons {
+            display: flex;
+            justify-content: space-around;
+        }
+        .registered-user {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-3">
+        <div class="header-container">
+            <h1>Student List</h1>
+            <h3 class="registered-user">Registered Users: {{ registered_users }}</h3>
+            <a href="{% url 'register_team' %}" class="btn btn-primary register-button">Register Team</a>
+        </div>
+        <form method="get" action="" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search by name or email">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped full-width-table">
+                    <thead>
+                        <tr>
+                            <th class="small-small-column">#</th>
+                            <th class="wide-column">Name</th>
+                            <th class="wide-column">Email</th>
+                            <th class="wide-column">University</th>
+                            <th>LeetCode</th>
+                            <th>Codeforces</th>
+                            <th class="small-column">View</th>
+                            <th class="small-column">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for student in students %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'student_detail' student.id %}" class="link-black" target="_blank" style="color: black;">{{ student.name }}</a>
+                            </td>
+                            <td>{{ student.email }}</td>
+                            <td><small>{{ student.university }}</small></td>
+                            <td>{{ student.leetcode_solved_problems_count }}</td>
+                            <td>{{ student.codeforces_solved_problems_count }}</td>
+                            <td class="action-icons">
+                                <a href="https://leetcode.com/{{ student.leetcode_handle }}" target="_blank">
+                                    <img src="{% static 'leetcode.png' %}" alt="LeetCode" class="icon">
+                                </a>
+                                <a href="https://codeforces.com/profile/{{ student.codeforces_handle }}" target="_blank">
+                                    <img src="{% static 'codeforces.png' %}" alt="Codeforces" class="icon">
+                                </a>
+                            </td>
+                            <td>
+                                {% if student.is_registered %}
+                                    <a href="{% url 'unregister_student' student.id %}" class="btn btn-success btn-sm">Unregister</a>
+                                {% else %}
+                                    <a href="{% url 'register_student' student.id %}" class="btn btn-danger btn-sm">Register</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8">No students found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Student List</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-3">
+        <h1>Student List</h1>
+        <form method="get" action="" class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search by name or email">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>University</th>
+                    <th>LeetCode Score</th>
+                    <th>Codeforces Score</th>
+                    <th>View</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.email }}</td>
+                    <td>{{ student.university }}</td>
+                    <td>{{ student.leetcode_solved_problems_count }}</td>
+                    <td>{{ student.codeforces_solved_problems_count }}</td>
+                    <td>
+                        <a href="https://leetcode.com/{{ student.leetcode_handle }}" target="_blank">
+                            <img src="{% static 'leetcode.png' %}" alt="LeetCode" class="icon">
+                        </a>
+                        <a href="https://codeforces.com/profile/{{ student.codeforces_handle }}" target="_blank">
+                            <img src="{% static 'codeforces.png' %}" alt="Codeforces" class="icon">
+
+                        </a>
+                    </td>
+                    <td>
+                        {% if student.is_registered %}
+                            <a href="{% url 'unregister_student' student.id %}" class="btn btn-danger btn-sm">Unregister</a>
+                        {% else %}
+                            <a href="{% url 'register_student' student.id %}" class="btn btn-primary btn-sm">Register</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8">No students found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html> {% endcomment %}
+
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student List</title>
+    <style>
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student List</h1>
+    <form method="get" action="">
+        <input type="text" name="q" placeholder="Search by name or email">
+        <input type="submit" value="Search">
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>University</th>
+                <th>LeetCode Score</th>
+                <th>Codeforces Score</th>
+                <th>View</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.university }}</td>
+                <td>{{ student.leetcode_solved_problems_count }}</td>
+                <td>{{ student.codeforces_solved_problems_count }}</td>
+                <td>
+                    <a href="https://leetcode.com/{{ student.leetcode_username }}" target="_blank">
+                        <img src="/path/to/leetcode_icon.png" alt="LeetCode" class="icon">
+                    </a>
+                    <a href="https://codeforces.com/profile/{{ student.codeforces_name }}" target="_blank">
+                        <img src="/path/to/codeforces_icon.png" alt="Codeforces" class="icon">
+                    </a>
+                </td>
+                <td>
+                    {% if student.is_registered %}
+                        <a href="{% url 'unregister_student' student.id %}">Unregister</a>
+                    {% else %}
+                        <a href="{% url 'register_student' student.id %}">Register</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No students found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html> {% endcomment %}

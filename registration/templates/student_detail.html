@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ student.name }} - Student Detail</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Student Detail: {{ student.name }}</h1>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ student.name }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ student.email }}</td>
+                </tr>
+                <tr>
+                    <th>University</th>
+                    <td>{{ student.university }}</td>
+                </tr>
+                <tr>
+                    <th>LeetCode Username</th>
+                    <td>{{ student.leetcode_handle }}</td>
+                </tr>
+                <tr>
+                    <th>Codeforces Username</th>
+                    <td>{{ student.codeforces_handle }}</td>
+                </tr>
+                <tr>
+                    <th>LeetCode Solved Problems</th>
+                    <td>{{ student.leetcode_solved_problems_count }}</td>
+                </tr>
+                <tr>
+                    <th>Codeforces Solved Problems</th>
+                    <td>{{ student.codeforces_solved_problems_count }}</td>
+                </tr>
+                <!-- Add more fields as necessary -->
+            </tbody>
+        </table>
+        <a href="{% url 'student_list' %}" class="btn btn-primary">Back to Student List</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Team</title>
+    {% comment %} {% load form_filters %} {% endcomment %}
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Select2 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <style>
+        .registration-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 30px auto;
+        }
+    
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+        }
+    
+        .form-group {
+            margin-bottom: 15px;
+        }
+    
+        .form-control {
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+        }
+    
+        .select2-container--default .select2-selection--single {
+            border-radius: 4px;
+            height: calc(1.5em + 0.75rem + 2px);
+            padding: 0.375rem 0.75rem;
+        }
+    
+        .select2-selection__arrow {
+            height: calc(1.5em + 0.75rem);
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            width: 20px;
+        }
+    
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+    
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+    
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .registration-container {
+                margin: 15px;
+                padding: 15px;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container mt-3">
+        <h1>Register Team</h1>
+        <form method="post" action="{% url 'register_team' %}">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            
+            <!-- Team Name Field -->
+            <div class="form-group">
+                <label for="teamName">Team Name</label>
+                {{ form.name }}
+                {{ form.name.errors }}
+            </div>
+        
+            <!-- Member Selection Fields -->
+            {% for field in form %}
+                {% if field.name != 'name' %}
+                    <div class="form-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% comment %} {{ field |add_class:'form-control' }} {% endcomment %}
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        
+            <button type="submit" class="btn btn-primary">Register Team</button>
+        </form>
+    </div>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.select2-member').select2({
+                placeholder: 'Select a member',
+                ajax: {
+                    url: '/team/search',  // URL of your search API
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: data.map(function(item) {
+                                return { id: item.id, text: item.name }; // Adjust based on your API's response
+                            })
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 1  // Minimum number of characters to trigger the search
+            });
+        });
+    </script>
+</body>
+</html>
+
+{% comment %} 
+        
+<form method="post" action="{% url 'register_team' %}">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <!-- Team Name Field -->
+    <div class="form-group">
+        <label for="teamName">Team Name</label>
+        <input type="text" id="teamName" name="teamName" class="form-control" required>
+    </div>
+
+    <!-- Member Selection Fields -->
+    {% for i in "123" %}
+    <div class="form-group">
+        <label for="member{{ i }}">Member {{ i }}</label>
+        <select class="form-control" id="member{{ i }}" name="member{{ i }}" required>
+            <option value="">Select a member</option>
+            {% for user in registered_users %}
+            <option value="{{ user.id }}">{{ user.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">Register Team</button>
+</form>
+</div> {% endcomment %}
+{% comment %} <form method="post" action="{% url 'register_team' %}">
+    {% csrf_token %}
+    <!-- Team Name Field -->
+    <div class="form-group">
+        <label for="teamName">Team Name</label>
+        <input type="text" id="teamName" name="teamName" class="form-control">
+    </div>
+
+    <!-- Member Selection Fields -->
+    <div class="form-group">
+        <label for="member1">Member 1</label>
+        <select class="form-control" id="member1" name="member1">
+            {% for user in registered_users %}
+            <option value="{{ user.id }}">{{ user.name }}</option>
+            {% endfor %}
+            
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="member2">Member 2</label>
+        <select class="form-control" id="member1" name="member1">
+            {% for user in registered_users %}
+            <option value="{{ user.id }}">{{ user.name }}</option>
+            {% endfor %}
+            
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="member3">Member 3</label>
+        <select class="form-control" id="member1" name="member1">
+            {% for user in registered_users %}
+            <option value="{{ user.id }}">{{ user.name }}</option>
+            {% endfor %}
+            
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register Team</button>
+</form> {% endcomment %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Welcome to EtCPC 2024 Kickoff Registration</h1>
+        <div class="list-group mt-3">
+            <a href="{% url 'student_list' %}" class="list-group-item list-group-item-action">Student List</a>
+            <a href="{% url 'register_team' %}" class="list-group-item list-group-item-action">Register Team</a>
+            <a href="{% url 'team_list' %}" class="list-group-item list-group-item-action">Team List</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
